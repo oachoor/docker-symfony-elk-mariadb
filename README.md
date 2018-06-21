@@ -182,9 +182,10 @@ In progress...
 
 ## Tasks
 
-- [ ] Automate Download and Import SQL dump from Amazon S3.
-- [ ] Automate Download and Import SQL dump from Amazon S3.
-- [ ] Start multiple services exposing the same port (e.g 80).
-- [ ] Using common containers (eg, mysql, elk) for all installations.
-- [ ] Activate and Switching between builds (**Ansible?**).
+- [ ] Symfony4 support.
+- [ ] Varnish integration.
+- [ ] Automate Download and Import SQL snapshots from Amazon S3.
+- [ ] Start multiple projects/services simultaneously.
+- [ ] Know how to share data between containers.
+- [ ] Activate and Switch between builds (**Ansible?**).
 - [ ] Apache / Nginx / Varnish templates.
