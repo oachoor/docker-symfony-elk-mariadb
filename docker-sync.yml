@@ -1,0 +1,37 @@
+version: '2'
+
+options:
+  compose-file-path: 'docker-compose-dev.yml'
+  verbose: true
+
+syncs:
+  ${APP_NAME}-app-sync:
+      src: ${APP_PATH}
+      sync_strategy: native_osx
+      notify_terminal: true
+      sync_host_port: 10871
+      sync_userid: 1000
+      sync_excludes:
+          - node_modules
+          - var/*
+          - .idea
+          - .docker-sync
+      watch_excludes:
+          - .*/node_modules
+          - .*/logs
+          - .*/var/cache
+          - .*/.git
+          - .*/.idea
+          - .docker-sync
+  ${APP_NAME}-elk-data-sync:
+      src: './doc/docker/.data/elasticsearch'
+      sync_host_port: 20012
+      sync_strategy: native_osx
+      sync_excludes: ['*']
+      watch_excludes: ['*']
+  ${APP_NAME}-mysql-sync:
+      src: './doc/docker/.data/mysql'
+      sync_host_port: 20013
+      sync_strategy: native_osx
+      sync_excludes: ['*']
+      watch_excludes: ['*']

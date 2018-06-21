@@ -1,0 +1,7 @@
+/var/log/today.log {
+  rotate 4
+  daily
+  compress
+  missingok
+  notifempty
+}
