@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+    logstash:
+        container_name: sf_logstash
+        build:
+            context: elk/logstash
+        volumes:
+            - ../var/logs:/var/log/other:cached
+        depends_on:
+            - elasticsearch
+        restart: on-failure
+        ports:
+          - '5044:5044'
+
+    kibana:
+        container_name: sf_kibana
+        build:
+            context: elk/kibana
+        depends_on:
+            - elasticsearch
+            - logstash
+        restart: on-failure
+        ports:
+            - '5601:5601'

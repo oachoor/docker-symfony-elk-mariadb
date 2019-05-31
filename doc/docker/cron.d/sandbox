@@ -1,1 +1,0 @@
-*/2 * * * * /app/www/app/console debug:router >> /app/logs/APP_NAME_router_debug.log 2>&1

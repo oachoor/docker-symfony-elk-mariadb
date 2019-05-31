@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+    app:
+        depends_on:
+            - mariadb
+
+    mariadb:
+        container_name: sf_mariadb
+        image: mariadb:latest
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: db_name
+            MYSQL_USER: db_user
+            MYSQL_PASSWORD: db_password
+        volumes:
+            - ../var/data/mariadb:/var/lib/mariadb:rw
+            - ./db:/docker-entrypoint-initdb.d
+        ports: ['3306:3306']
+        restart: on-failure
