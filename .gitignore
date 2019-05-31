@@ -1,4 +1,3 @@
-./doc/.data/*
-.env
 .idea
 .DS_Store
+docker-compose.yaml
