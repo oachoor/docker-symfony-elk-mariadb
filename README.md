@@ -47,7 +47,7 @@
    ```sh
    $ By turning-off EasyPHP, WAMP or any other tool...
    ```
-4.  Due to an Elasticsearch 6 requirement, we may need to set a host's sysctl option and restart ([More info](https://github.com/spujadas/elk-docker/issues/92)):
+4. Due to an Elasticsearch 6 requirement, we may need to set a host's sysctl option and restart ([More info](https://github.com/spujadas/elk-docker/issues/92)):
 
     If it asks you for a username and password, Log in with root and no password.
     If it just has a blank screen, press Return.
@@ -66,7 +66,7 @@
 
 1. Initialize, clone or download your symfony repository and cd to it.
 
-2. Clone this repository inside
+2. Clone this repository in the working directory
     ```sh
     $ git clone https://github.com/oachoor/docker-for-symfony.git docker && rm -rf docker/.git
     ```
@@ -81,7 +81,7 @@
 
 4. Build & run containers
 
-    **Important**: You may want to use MariaDB, Kibana or Xdebug? then keep/eliminate the arguments accordingly.
+    **Important**: You may want to use MariaDB, Kibana or Xdebug? then assign the arguments accordingly.
     ```bash
     $ make start db=mariadb xdebug=true kibana=true
     ```
@@ -124,7 +124,7 @@ Once all the containers are up, our services are available at:
 
 ## Task lists
 
-- [ ] Implement Varnish container.
+- [ ] Implement Varnish.
 - [ ] Implement Logrotate.
 - [ ] Automate Download and Import SQL dump from Amazon S3.
 - [ ] Optimize Xdebug.
