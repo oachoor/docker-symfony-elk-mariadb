@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-if [[ ! -f 'composer.lock' ]]; then
+if [[ -f 'composer.lock' ]]; then
     echo "Composer install..."
     git config --global http.sslverify false
     composer config --global process-timeout 3000

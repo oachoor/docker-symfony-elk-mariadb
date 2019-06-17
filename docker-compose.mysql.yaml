@@ -15,11 +15,9 @@ services:
             - '--lower_case_table_names=0'
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: db_name
-            MYSQL_USER: db_user
-            MYSQL_PASSWORD: db_password
+            DATABASE_URL: mysql://db_user:db_password@sf_mysql:3306/db_name
         volumes:
-            - ../var/data/mysql:/var/lib/mysql:rw
-            - ./db:/docker-entrypoint-initdb.d
+            - ./srv/var/data/mysql:/var/lib/mysql:rw
+            - ./docker/db:/docker-entrypoint-initdb.d
         ports: ['3306:3306']
         restart: on-failure

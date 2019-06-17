@@ -2,6 +2,9 @@ db := mysql
 xdebug := false
 kibana := false
 hostname := sandbox
+composer := $(shell composer -v 2> /dev/null)
+has_composer := $(if $(composer), true, false)
+php_pod = $$(kubectl get pod --selector=app=php -o jsonpath='{.items[*].metadata.name}')
 
 help:
 	@echo "${YELLOW}Commands:${NC}"
@@ -15,9 +18,18 @@ init:
 	@$(shell cp -rf $(shell pwd)/docker-compose.dist.yaml $(shell pwd)/docker-compose.yaml 2> /dev/null)
 	@if [ $(hostname) != "" ]; then\
         echo "${BLUE}Adding '$(hostname)' to hosts...${NC}";\
-        sudo sh ./hosts.sh add "127.0.0.1 $(hostname).local";\
+        sudo sh ./docker/hosts.sh add "127.0.0.1 $(hostname).local";\
         sed -i -e "; s/nginx_host=sf.local/nginx_host=$(hostname).local/g" docker-compose.yaml;\
         rm -f docker-compose.yaml-e;\
+	fi
+	@if [ ! -d "srv" ]; then\
+		 if [ $(has_composer) = "true" ]; then\
+		 	echo "${BLUE}Creating project...${NC}";\
+			composer create-project symfony/website-skeleton srv;\
+		 else\
+            echo "${ORANGE}Create srv directory, please init your project there.${NC}";\
+            mkdir srv;\
+ 		 fi;\
 	fi
 
 clean:
@@ -33,8 +45,8 @@ clean:
 	fi
 
 start:
-	@if [ ! -f "composer.json" ]; then\
-        echo "${RED}Missing project files, forgot to init/clone your symfony project?";\
+	@if [ ! -f "srv/composer.json" ]; then\
+        echo "${RED}srv/ directory seems to be empty, did you forget to create/clone your symfony project?";\
         exit 1;\
     fi
 	@if [ ! -f docker-compose.yaml ]; then\
@@ -54,8 +66,16 @@ start:
 	@if [ $(kibana) = "true" ]; then\
 		echo "${BLUE}With 'kibana/logstash'...${NC}";\
 		docker-compose -f docker-compose.yaml -f docker-compose.$(db).yaml -f docker-compose.kibana.yaml up --build;\
+	elif [ $(all) = "true" ]; then\
+		docker-compose \
+			-f docker-compose.yaml \
+			-f docker-compose.$(db).yaml \
+		    -f docker-compose.kibana.yaml \
+		    -f docker-compose.varnish.yaml \
+		    -f docker-compose.blackfire.yaml \
+		    up --build --force-recreate;\
 	else\
-		docker-compose -f docker-compose.yaml -f docker-compose.$(db).yaml up --build --force-recreate;\
+		docker-compose -f docker-compose.yaml -f docker-compose.$(db).yaml up --build;\
 	fi
 
 stop:

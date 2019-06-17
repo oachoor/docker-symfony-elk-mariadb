@@ -4,13 +4,13 @@ services:
     app:
         container_name: sf_app
         build:
-            context: app
+            context: docker/app
             args:
                 - timezone=Europe/Berlin
                 - xdebug=false
         volumes:
-            - ../:/srv:cached
-            - ../var/log:/srv/var/log:cached
+            - ./srv:/srv:cached
+            - ./srv/var/log:/srv/var/log:cached
         environment:
             XDEBUG_CONFIG: "remote_host=10.254.254.254 remote_port=9001"
         depends_on:
@@ -22,15 +22,15 @@ services:
     nginx:
         container_name: sf_nginx
         build:
-            context: nginx
+            context: docker/nginx
             args:
                 - nginx_host=sandbox.local
         ports:
             - '80:80'
             - '443:443'
         volumes:
-            - ../:/srv:cached
-            - ../var/log:/var/log/nginx:cached
+            - ./srv:/srv:cached
+            - ./srv/var/log:/var/log/nginx:cached
         links:
             - app
         restart: on-failure
@@ -45,9 +45,9 @@ services:
     elasticsearch:
         container_name: sf_elasticsearch
         build:
-            context: elk/elasticsearch
+            context: docker/elk/elasticsearch
         volumes:
-            - ../var/data/elasticsearch:/usr/share/elasticsearch/data:cached
+            - ./srv/var/data/elasticsearch:/usr/share/elasticsearch/data:cached
         environment:
             ES_JAVA_OPTS: "-Xmx1g -Xms1g"
         ports:

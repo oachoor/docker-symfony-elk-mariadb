@@ -1,0 +1,20 @@
+version: '3.7'
+
+# Replace keys with yours.
+services:
+    app:
+        environment:
+            BLACKFIRE_CLIENT_ID: bee7c0e0-8156-405a-a715-67f174272af3
+            BLACKFIRE_CLIENT_TOKEN: 57b390cbf7924cf42d7a9415bf14b5e5bed76d324a7c61930c6a66c9f9370019
+
+    blackfire:
+        image: blackfire/blackfire
+        container_name: sf_blackfire
+        depends_on:
+            - app
+        environment:
+            BLACKFIRE_SERVER_ID: 4e53783a-c958-4eac-ac32-5d997751db74
+            BLACKFIRE_SERVER_TOKEN: d72ae7322ec5004b4d3217791aea7646786c7886fec2a8280fe8fc8021525802
+            BLACKFIRE_LOG_LEVEL: 4
+        ports:
+            - '8707:8707'

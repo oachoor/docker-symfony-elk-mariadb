@@ -4,9 +4,9 @@ services:
     logstash:
         container_name: sf_logstash
         build:
-            context: elk/logstash
+            context: docker/elk/logstash
         volumes:
-            - ../var/logs:/var/log/other:cached
+            - ./srv/var/log:/var/log/other:cached
         depends_on:
             - elasticsearch
         restart: on-failure
@@ -16,7 +16,7 @@ services:
     kibana:
         container_name: sf_kibana
         build:
-            context: elk/kibana
+            context: docker/elk/kibana
         depends_on:
             - elasticsearch
             - logstash

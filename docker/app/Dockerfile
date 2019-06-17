@@ -126,7 +126,7 @@ RUN echo 'alias sf="bin/console"' >> ~/.bashrc \
 
 WORKDIR /srv
 
-COPY ./entrypoint.sh /usr/local/bin/
+COPY entrypoint.sh /usr/local/bin/
 RUN chmod 777 /usr/local/bin/entrypoint.sh \
     && ln -s /usr/local/bin/entrypoint.sh /
 

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: mariadb
+spec:
+    selector:
+        matchLabels:
+            app: mariadb
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                app: mariadb
+        spec:
+            containers:
+                - name: mariadb
+                  image: mariadb:latest
+                  ports:
+                      - containerPort: 3306
+                  env:
+                      - name: MYSQL_ROOT_PASSWORD
+                        value: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: mariadb
+    labels:
+        app: mariadb
+spec:
+    selector:
+        app: mariadb
+    type: ClusterIP
+    ports:
+        - port: 3306
+          protocol: TCP

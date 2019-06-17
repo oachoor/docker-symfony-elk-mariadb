@@ -1,4 +1,4 @@
-# Minimal Docker Stack for Symfony4 projects
+# Minimal Docker Stack for PHP projects
 
 ## Services
 
@@ -9,6 +9,9 @@
 * [Logstash](https://www.elastic.co/products/logstash)
 * [Kibana](https://www.elastic.co/products/kibana)
 * [Redis](https://redis.io/)
+* [Blackfire](https://blackfire.io/)
+* [Varnish](https://varnish-cache.org/)
+* [Kubernetes](https://kubernetes.io/)
 
 ##  Requirements
 
@@ -64,31 +67,27 @@
 
 ## Steps
 
-1. Initialize, clone or download your symfony repository and cd to it.
+1. git clone https://github.com/oachoor/docker-for-symfony.git sandbox && rm -rf sandbox/.git && cd sandbox
 
-2. Clone this repository inside
-    ```sh
-    $ git clone https://github.com/oachoor/docker-for-symfony.git docker && rm -rf docker/.git
-    ```
-
-3. Initialize docker-compose file
+2. Initialize docker-compose file
     
-    **Note** *app_name* ("sandbox" by default) will be used as hostname.
+    **Note:** *app_name* ("sandbox" by default) will be used as hostname and `symfony/website-skeleton` project will be installed.
+        
     ```sh
     $ cd docker
     $ make init app_name=mybox
     ```
 
-4. Build & run containers
+3. Build & run containers
 
-    **Important**: You may want to use MariaDB, Kibana or Xdebug? then keep/eliminate the arguments accordingly.
+    **Important**: You may want to use MariaDB, Varnish, Blackfire, Kibana or Xdebug? then keep/eliminate the arguments accordingly.
     ```bash
     $ make start db=mariadb xdebug=true kibana=true
     ```
     
-5. (Optional) Xdebug: Configure PHPStorm
+4. (Optional) Xdebug: Configure PHPStorm
     
-    ![PHPStorm > Preferences > Languages & Frameworks > PHP > Debug > DBGp Proxy](app/xdebug.png)
+    ![PHPStorm > Preferences > Languages & Frameworks > PHP > Debug > DBGp Proxy](docker/app/xdebug.png)
 
 ## How does it work?
 
@@ -124,7 +123,8 @@ Once all the containers are up, our services are available at:
 
 ## Task lists
 
-- [ ] Implement Varnish container.
+- [x] Implement Varnish container.
+- [x] Implement Blackfire container.
 - [ ] Implement Logrotate.
 - [ ] Automate Download and Import SQL dump from Amazon S3.
 - [ ] Optimize Xdebug.
