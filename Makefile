@@ -35,13 +35,13 @@ init:
 clean:
 	@if [ "$(force)" = "true" ]; then\
 		echo "${BLUE}Reset files and directories...${NC}";\
-		find .. -type f -maxdepth 1 -delete -print;\
-		find .. -mindepth 1 -maxdepth 1 -type d -not \( -name "docker" \) -print -exec rm -rf {} +;\
+		rm -rf ./srv;\
+		rm -f docker-compose.yaml;\
 	else\
 		echo "${BOLD_RED}This do not usually happens but okay, the following files and directories will be removed:${NC}";\
-		find .. -type f -maxdepth 1 -print;\
-		find .. -mindepth 1 -maxdepth 1 -type d -not \( -name "docker" \) -print;\
-		echo "${YELLOW}If so, then you may safely re-run the command with force:${NC} make clean force=true";\
+		find ./srv -type f -maxdepth 1 -print;\
+		find ./srv -mindepth 1 -maxdepth 1 -type d -print;\
+		echo "${YELLOW}If so, then you may re-run the command with force:${NC} make clean force=true";\
 	fi
 
 start:

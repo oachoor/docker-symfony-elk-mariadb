@@ -19,3 +19,4 @@ services:
             - nginx
             - app
         #command: ['--acl-add', 'app']
+        restart: on-failure

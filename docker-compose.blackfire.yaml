@@ -18,3 +18,4 @@ services:
             BLACKFIRE_LOG_LEVEL: 4
         ports:
             - '8707:8707'
+        restart: on-failure
