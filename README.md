@@ -1,4 +1,4 @@
-# Minimal Docker Stack for PHP projects
+# Dockerized Symfony Starter
 
 ## Services
 
@@ -18,7 +18,7 @@ This stack needs [docker](https://www.docker.com/community-edition#/download) an
 
 ## Steps
     
-1. `git clone https://github.com/oachoor/docker-lemp-stack.git my-project && cd my-project`
+1. `git clone https://github.com/oachoor/docker-symfony-elk-mariadb.git my-project && cd my-project`
     
 2. Initialize
     
@@ -86,21 +86,7 @@ Once all the containers are up, our services are available at (http/https):
 
 ## Task lists
 
-- [ ] Automate Source-drivers and daemons cronjobs.
-- [x] Automate cloning repository + executing symfony commands.
-- [ ] Automate Download and Import SQL dump from Amazon S3 + Storage.
-- [x] Work on ENV file to setup (hostname, es-indexes, parameters etc...) per project.
-- [x] Review and Optimize Docker-sync.
-- [ ] Know How To Share Data between Docker Containers. (**Kubernetes**).
-- [ ] Start multiple services exposing the same port (e.g 80).
-- [x] Using common containers (eg, mysql, elk) for all installations.
-- [x] Adjust automated deployment to work with docker instead of vagrant.
-- [ ] Adjust automated test-execution to run with the docker stack.
-- [ ] Activate and Switching between builds (**Ansible**).
-- [x] Dynamic .env file - support multiple projects per repository (demo-marc, demo-sales).
-- [x] Policies per project. (Deprecated since 2.0)
-- [x] Apache / Nginx / Varnish templates.
-- [ ] Setup hosts file between containers.
-- [ ] Implement Logrotate.
+- [ ] Implement GraphQL.
+- [ ] Implement ReactJS/Webpack starter.
 
 :tada: Now we can stop our stack with `make stop` and start it again with `make start`

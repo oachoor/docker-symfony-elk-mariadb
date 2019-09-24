@@ -20,7 +20,7 @@ init:
 	@if [ -d "srv" -a -f .env ]; then\
 		echo "${RED}It seems that you already initialized the project, you may want to run ${NC}make clean${RED} to start over?";\
 		exit 1;\
-    fi
+	fi
 	@echo "${BLUE}Initialize ${NC}.env${BLUE}, ${NC}auth.json${BLUE} files...${NC}"
 	@$(shell cp -f $(shell pwd)/.env.dist $(shell pwd)/.env 2> /dev/null)
 	@$(shell cp -n $(shell pwd)/auth.json.dist $(shell pwd)/auth.json 2> /dev/null)
@@ -50,7 +50,7 @@ start: check-db
 	@if [ ! -f "srv/composer.json" ]; then\
         echo "${RED}Directory ${NC}srv/${RED} seems to be empty, did you forget to create/clone your ${ORANGE}Content${RED}pepper project?";\
         exit 1;\
-    fi
+	fi
 	@if grep -q your.username "auth.json"; then\
 		echo "${RED}Looks like you forgot to set your Gitlab credentials in ${NC}auth.json${RED} file?";\
 		exit 2;\
