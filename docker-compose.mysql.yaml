@@ -6,7 +6,7 @@ services:
             - mysql
 
     mysql:
-        container_name: sf_mysql
+        container_name: ${APP_NAME}_mysql
         image: mysql:latest
         command:
             - '--character-set-server=utf8mb4'
@@ -14,10 +14,12 @@ services:
             - '--default-authentication-plugin=mysql_native_password'
             - '--lower_case_table_names=0'
         environment:
-            MYSQL_ROOT_PASSWORD: root
-            DATABASE_URL: mysql://db_user:db_password@sf_mysql:3306/db_name
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         volumes:
-            - ./srv/var/data/mysql:/var/lib/mysql:rw
+            - ./.data/mysql:/var/lib/mysql:rw,delegated
             - ./docker/db:/docker-entrypoint-initdb.d
         ports: ['3306:3306']
         restart: on-failure

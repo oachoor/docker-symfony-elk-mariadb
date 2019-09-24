@@ -9,7 +9,7 @@ services:
 
     blackfire:
         image: blackfire/blackfire
-        container_name: sf_blackfire
+        container_name: ${APP_NAME}_blackfire
         depends_on:
             - app
         environment:

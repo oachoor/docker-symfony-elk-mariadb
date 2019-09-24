@@ -1,0 +1,56 @@
+version: '3.7'
+
+services:
+	app:
+		container_name: ${APP_NAME}_app
+		build:
+			context: ./docker/app
+			args:
+				- timezone=${TZ}
+				- xdebug=${XDEBUG}
+		volumes:
+			- ./srv:/srv:cached
+			- ./srv/var/log:/srv/var/log:cached
+		environment:
+			XDEBUG_CONFIG: "remote_host=10.254.254.254 remote_port=9001"
+		depends_on:
+			- redis
+			- elasticsearch
+		restart: on-failure
+
+	nginx:
+		container_name: ${APP_NAME}_nginx
+		build:
+			context: ./docker/nginx
+			args:
+				- nginx_host=${NGINX_HOST}
+		ports:
+			- '80:80'
+			- '443:443'
+		volumes:
+			- ./srv/var/log:/var/log/nginx:cached
+			- ./srv:/srv:cached
+		links:
+			- app
+		restart: on-failure
+		init: true
+
+	redis:
+		image: redis:latest
+		init: true
+		container_name: ${APP_NAME}_redis
+		restart: on-failure
+
+	elasticsearch:
+		container_name: ${APP_NAME}_elasticsearch
+		build:
+			context: docker/elk/elasticsearch
+		volumes:
+			- ./.data/elasticsearch:/usr/share/elasticsearch/data:cached
+		environment:
+			ES_JAVA_OPTS: "-Xmx1g -Xms1g"
+		ports:
+			- '9300:9300'
+			- '9200:9200'
+		restart: on-failure
+		init: true # helping fighting zombie processes

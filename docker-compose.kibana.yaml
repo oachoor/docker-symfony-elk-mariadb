@@ -2,11 +2,11 @@ version: '3.7'
 
 services:
     logstash:
-        container_name: sf_logstash
+        container_name: ${APP_NAME}_logstash
         build:
             context: docker/elk/logstash
         volumes:
-            - ./srv/var/log:/var/log/other:cached
+            - ./srv/var/logs:/var/log/other:cached
         depends_on:
             - elasticsearch
         restart: on-failure
@@ -14,7 +14,7 @@ services:
           - '5044:5044'
 
     kibana:
-        container_name: sf_kibana
+        container_name: ${APP_NAME}_kibana
         build:
             context: docker/elk/kibana
         depends_on:

@@ -10,84 +10,46 @@
 * [Kibana](https://www.elastic.co/products/kibana)
 * [Redis](https://redis.io/)
 * [Blackfire](https://blackfire.io/)
-* [Varnish](https://varnish-cache.org/)
 * [Kubernetes](https://kubernetes.io/)
 
-##  Requirements
+## Requirements
 
-1. This stack needs [docker](https://www.docker.com/community-edition#/download) and [docker-compose](https://docs.docker.com/compose/install) to be installed.
-
-2. Run Docker and adjust the settings minimum as following:
-
-     **Advanced >**
-	 - **CPUs** : 4
-	 - **Memory** : 4.0 GiB
-	 - **Swap** : 1.0 GiB
-	
-	**File Sharing >**
-			Make sure the folder (shared path) of your installation is listed, otherwise simply add it.
-    
-3. Stop any system's ngixn/apache2, mysql, elasticsearch, redis services
-   
-   OSX:
-   ```sh
-   $ sudo nginx -s stop 
-   $ sudo apachectl -k stop
-   $ redis-cli shutdown
-   $ sudo brew services stop mysql or sudo launchctl unload -w /Library/LaunchDaemons/com.mysql.mysql.plist
-   
-   ```
-   
-   Linux:
-   ```sh
-   $ sudo service nginx stop or sudo /etc/init.d/nginx stop
-   $ sudo service apache2 stop or sudo /etc/init.d/apache2 stop
-   $ sudo service mysqld stop or sudo /etc/init.d/mysql stop
-   $ sudo /etc/init.d/redis-server stop
-   ```
-   
-   Windows: (Only tested on Linux and OSX, perhaps it could work on Windows)
-   ```sh
-   $ By turning-off EasyPHP, WAMP or any other tool...
-   ```
-4.  Due to an Elasticsearch 6 requirement, we may need to set a host's sysctl option and restart ([More info](https://github.com/spujadas/elk-docker/issues/92)):
-
-    If it asks you for a username and password, Log in with root and no password.
-    If it just has a blank screen, press Return.
-    Then configure the sysctl setting as you would for Linux:
-
-    ```sh
-    $ screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
-    $ sysctl -w vm.max_map_count=262144
-    ```
-    
-    Exit by Control-A Control-\.
-    
-    In some cases, this change does not persist across restarts of the VM. So, while screen'd into, edit the file /etc/sysctl.d/00-alpine.conf and add the parameter vm.max_map_count=262144 to the end of file.
+This stack needs [docker](https://www.docker.com/community-edition#/download) and [docker-compose](https://docs.docker.com/compose/install) to be installed.
 
 ## Steps
-
-1. git clone https://github.com/oachoor/docker-for-symfony.git sandbox && rm -rf sandbox/.git && cd sandbox
-
-2. Initialize docker-compose file
     
-    **Note:** *app_name* ("sandbox" by default) will be used as hostname and `symfony/website-skeleton` project will be installed.
-        
+1. `git clone https://github.com/oachoor/docker-lemp-stack.git my-project && cd my-project`
+    
+2. Initialize
+    
+    **Arguments:** 
+     - *app_name* ("sf" by default), will be used as database name with 'db_' as prefix.
+     - *repository* ("symfony/website-skeleton" by default), otherwise your Gitlab/Github url.
+     - *branch* ("master" by default), will be used for cloning symfony.
     ```sh
-    $ cd docker
-    $ make init app_name=mybox
+    $ make init
     ```
 
-3. Build & run containers
+3. (Optional - **MariaDB** only!) Setting "server_version" value:
+    ```yaml
+    # srv/config/packages/doctrine.yaml
+    doctrine:
+        dbal:
+            server_version: 'mariadb-10.3.14'
+    ```
 
-    **Important**: You may want to use MariaDB, Varnish, Blackfire, Kibana or Xdebug? then keep/eliminate the arguments accordingly.
+5. Build & run containers
+
+    **Important**: You may want to use MariaDB, Blackfire, Kibana or Xdebug? then keep/eliminate the arguments accordingly.
     ```bash
-    $ make start db=mariadb xdebug=true kibana=true
+    $ make start db=mariadb
     ```
     
-4. (Optional) Xdebug: Configure PHPStorm
+6. (Optional) Xdebug: Configure PHPStorm
     
     ![PHPStorm > Preferences > Languages & Frameworks > PHP > Debug > DBGp Proxy](docker/app/xdebug.png)
+    
+7. Done! you may run `make logs` to see the progress.
 
 ## How does it work?
 
@@ -102,31 +64,43 @@ We have the following *docker-compose* built images:
 Running `docker-compose ps` should result in the following running containers:
 
 ```
-Name                     Command                          State   Ports
+Name                Command                          State   Ports
 -----------------------------------------------------------------------------------------------------
-sandbox_app              docker-php-entrypoi              Up      9000/tcp
-sandbox_nginx            nginx                            Up      0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp
-sandbox_mysql            /entrypoint.sh mysqld            Up      0.0.0.0:3306->3306/tcp
-sandbox_redis            docker-entrypoint.sh             Up      6379/tcp
-sandbox_elasticsearch    /usr/bin/supervisord -n -c ...   Up      0.0.0.0:9200->9200/tcp, 9300/tcp
+sf_app              docker-php-entrypoi              Up      9000/tcp
+sf_nginx            nginx                            Up      0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp
+sf_mysql            /entrypoint.sh mysqld            Up      0.0.0.0:3306->3306/tcp
+sf_redis            docker-entrypoint.sh             Up      6379/tcp
+sf_elasticsearch    /usr/bin/supervisord -n -c ...   Up      0.0.0.0:9200->9200/tcp, 9300/tcp
 ```
 
 ## Usage
 
-Once all the containers are up, our services are available at:
+Once all the containers are up, our services are available at (http/https):
 
-* Sandbox: `http(s)://sandbox.local:80`
-* Mysql server: `http(s)://sandbox.local:3307`
-* Redis: `http(s)://redis.local:11211`
-* Elasticsearch: `http(s)://sandbox.local:9200`
-* Kibana: `http(s)://sandbox.local:5601`
+* Application: `http://sf.local:80`
+* Mysql server: `http://sf.local:3307`
+* Redis: `http://sf.local:11211`
+* Elasticsearch: `http://sf.local:9200`
+* Kibana: `http://sf.local:5601`
+* Log files location: *var/logs/nginx* and *var/logs/symfony*
 
 ## Task lists
 
-- [x] Implement Varnish container.
-- [x] Implement Blackfire container.
+- [ ] Automate Source-drivers and daemons cronjobs.
+- [x] Automate cloning repository + executing symfony commands.
+- [ ] Automate Download and Import SQL dump from Amazon S3 + Storage.
+- [x] Work on ENV file to setup (hostname, es-indexes, parameters etc...) per project.
+- [x] Review and Optimize Docker-sync.
+- [ ] Know How To Share Data between Docker Containers. (**Kubernetes**).
+- [ ] Start multiple services exposing the same port (e.g 80).
+- [x] Using common containers (eg, mysql, elk) for all installations.
+- [x] Adjust automated deployment to work with docker instead of vagrant.
+- [ ] Adjust automated test-execution to run with the docker stack.
+- [ ] Activate and Switching between builds (**Ansible**).
+- [x] Dynamic .env file - support multiple projects per repository (demo-marc, demo-sales).
+- [x] Policies per project. (Deprecated since 2.0)
+- [x] Apache / Nginx / Varnish templates.
+- [ ] Setup hosts file between containers.
 - [ ] Implement Logrotate.
-- [ ] Automate Download and Import SQL dump from Amazon S3.
-- [ ] Optimize Xdebug.
 
-:tada: Now we can stop our stack with `make down` and start it again with `make start`
+:tada: Now we can stop our stack with `make stop` and start it again with `make start`

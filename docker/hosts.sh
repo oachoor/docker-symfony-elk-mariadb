@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # @usage
-# sudo sh ./docker/hosts.sh add "127.0.0.1       sandbox.local"
-# sudo sh ./docker/hosts.sh remove "127.0.0.1       sandbox.local"
+# sudo sh ./docker/hosts.sh add "127.0.0.1 sf.local admin.sf.local"
+# sudo sh ./docker/hosts.sh remove "127.0.0.1 sf.local admin.sf.local"
 
 # PATH TO YOUR HOSTS FILE
 ETC_HOSTS=/etc/hosts

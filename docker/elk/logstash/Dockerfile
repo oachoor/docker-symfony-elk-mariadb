@@ -1,5 +1,5 @@
 # https://github.com/elastic/stack-docker
-FROM docker.elastic.co/logstash/logstash:6.7.2
+FROM docker.elastic.co/logstash/logstash:7.3.2
 
 RUN rm /usr/share/logstash/config/logstash.yml
 ADD logstash.yml /usr/share/logstash/config/

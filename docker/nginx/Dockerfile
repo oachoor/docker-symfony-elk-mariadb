@@ -11,7 +11,7 @@ COPY openssl.cnf /etc/ssl/openssl.cnf
 RUN sed -i -e "s/NGINX_HOST/$nginx_host/g" /etc/ssl/openssl.cnf
 
 ADD nginx.conf /etc/nginx/
-ADD nghost.conf /etc/nginx/conf.d/default.conf
+ADD symfony.conf /etc/nginx/conf.d/default.conf
 RUN echo "upstream php-upstream { server app:9000; }" > /etc/nginx/conf.d/upstream.conf
 
 RUN openssl genrsa -des3 -passout pass:NotSecure -out /etc/ssl/server.pass.key 2048
