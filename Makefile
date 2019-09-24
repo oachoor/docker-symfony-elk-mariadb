@@ -1,6 +1,6 @@
 app_name := sf
 branch := master
-repository := https://github.com/symfony/website-skeleton.git
+repository :=
 xdebug := false
 kibana := false
 os := $(shell uname)
@@ -32,6 +32,8 @@ init:
 	fi
 	@if [ $(repository) != "" -a $(branch) != "" ]; then\
 		git clone -b $(branch) $(repository) srv;\
+	else\
+		composer create-project symfony/website-skeleton srv;\
 	fi
 	@echo "${GREEN}Done, ${NC}${RED}Please adapt ${NC}auth.json${RED} file with your Gitlab credentials.${NC}"
 
@@ -48,7 +50,7 @@ encore:
 
 start: check-db
 	@if [ ! -f "srv/composer.json" ]; then\
-		echo "${RED}Directory ${NC}srv/${RED} seems to be empty, did you forget to create/clone your ${ORANGE}Content${RED}pepper project?";\
+		echo "${RED}Directory ${NC}srv/${RED} seems to be empty, did you forget to create/clone your project?";\
 		exit 1;\
 	fi
 	@if grep -q your.username "auth.json"; then\

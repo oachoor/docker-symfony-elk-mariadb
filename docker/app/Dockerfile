@@ -121,9 +121,9 @@ RUN echo "locales locales/locales_to_be_generated multiselect en_US.UTF-8 UTF-8"
 ENV LANG en_US.UTF-8
 
 RUN echo 'alias sf="bin/console"' >> ~/.bashrc \
-&& echo 'alias cc="bin/console cache:clear --no-debug"' >> ~/.bashrc \
-&& echo 'alias ll="ls -la"' >> ~/.bashrc \
-&& echo 'alias logs="tail -f var/log/*.log"' >> ~/.bashrc \
+	&& echo 'alias cc="bin/console cache:clear --no-debug"' >> ~/.bashrc \
+	&& echo 'alias ll="ls -la"' >> ~/.bashrc \
+	&& echo 'alias logs="tail -f var/log/*.log"' >> ~/.bashrc
 
 WORKDIR /srv
 
