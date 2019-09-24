@@ -25,10 +25,10 @@ init:
 	@$(shell cp -f $(shell pwd)/.env.dist $(shell pwd)/.env 2> /dev/null)
 	@$(shell cp -n $(shell pwd)/auth.json.dist $(shell pwd)/auth.json 2> /dev/null)
 	@if [ $(app_name) != "" ]; then\
-        echo "${BLUE}Adding '$(app_name)' to hosts...${NC}";\
-        sudo sh ./docker/hosts.sh add "127.0.0.1 $(app_name).local admin.$(app_name).local";\
-        sed -i -e "s/APP_NAME=sf/APP_NAME=$(app_name)/g; s/NGINX_HOST=sf.local/NGINX_HOST=$(app_name).local/g; s/MYSQL_DATABASE=db_sf/MYSQL_DATABASE=db_$(app_name)/g" .env;\
-        rm -f .env-e;\
+		echo "${BLUE}Adding '$(app_name)' to hosts...${NC}";\
+		sudo sh ./docker/hosts.sh add "127.0.0.1 $(app_name).local admin.$(app_name).local";\
+		sed -i -e "s/APP_NAME=sf/APP_NAME=$(app_name)/g; s/NGINX_HOST=sf.local/NGINX_HOST=$(app_name).local/g; s/MYSQL_DATABASE=db_sf/MYSQL_DATABASE=db_$(app_name)/g" .env;\
+		rm -f .env-e;\
 	fi
 	@if [ $(repository) != "" -a $(branch) != "" ]; then\
 		git clone -b $(branch) $(repository) srv;\
@@ -48,11 +48,11 @@ encore:
 
 start: check-db
 	@if [ ! -f "srv/composer.json" ]; then\
-        echo "${RED}Directory ${NC}srv/${RED} seems to be empty, did you forget to create/clone your ${ORANGE}Content${RED}pepper project?";\
-        exit 1;\
+		echo "${RED}Directory ${NC}srv/${RED} seems to be empty, did you forget to create/clone your ${ORANGE}Content${RED}pepper project?";\
+		exit 1;\
 	fi
 	@if grep -q your.username "auth.json"; then\
-		echo "${RED}Looks like you forgot to set your Gitlab credentials in ${NC}auth.json${RED} file?";\
+		echo "${RED}Looks like you forgot to set your Gitlab/Github credentials in ${NC}auth.json${RED} file?";\
 		exit 2;\
 	fi
 	@if [ $(db) != "mysql" -a $(db) != "mariadb" ]; then\
@@ -64,13 +64,13 @@ start: check-db
 	@$(shell cp -f $(shell pwd)/auth.json $(shell pwd)/srv/auth.json 2> /dev/null)
 	@echo "${BLUE}Starting containers with '$(db)'...${NC}"
 	@if [ $(xdebug) = true ]; then\
-    	echo "${BLUE}With 'xdebug', setting alias to 10.254.254.254...${NC}";\
-    	sed -i -e "s/XDEBUG=(.*)/XDEBUG=$(xdebug)/g" .env && rm -f .env-e;\
-    	if [ $(os) = "Darwin" ]; then\
-    	    sudo ifconfig lo0 alias 10.254.254.254;\
-    	else\
-    	    sudo ifconfig lo:0 10.254.254.254 up;\
-    	fi;\
+		echo "${BLUE}With 'xdebug', setting alias to 10.254.254.254...${NC}";\
+		sed -i -e "s/XDEBUG=(.*)/XDEBUG=$(xdebug)/g" .env && rm -f .env-e;\
+		if [ $(os) = "Darwin" ]; then\
+			sudo ifconfig lo0 alias 10.254.254.254;\
+		else\
+			sudo ifconfig lo:0 10.254.254.254 up;\
+		fi;\
 	fi
 	@if [ $(kibana) = true ]; then\
 		echo "${BLUE}With 'kibana/logstash'...${NC}";\
@@ -85,17 +85,17 @@ start: check-db
 switch:
 	@echo "${BLUE}Switching to $(branch)...${NC}"
 	@cd srv && \
-	    git checkout $(branch) && \
-	    git pull origin $(branch) && \
-	    docker-compose exec -T app composer config --global process-timeout 3600 && \
-	    docker-compose exec -T app composer install
+		git checkout $(branch) && \
+		git pull origin $(branch) && \
+		docker-compose exec -T app composer config --global process-timeout 3600 && \
+		docker-compose exec -T app composer install
 
 update:
 	@echo "${BLUE}Updating...${NC}"
 	@cd srv && \
-	    git pull && \
-	    docker-compose exec -T app composer config --global process-timeout 3600 && \
-	    docker-compose exec -T app composer update
+		git pull && \
+		docker-compose exec -T app composer config --global process-timeout 3600 && \
+		docker-compose exec -T app composer update
 
 stop:
 	@echo "${BLUE}Stopping all containers...${NC}"
