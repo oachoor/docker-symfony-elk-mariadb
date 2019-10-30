@@ -1,4 +1,4 @@
-FROM php:7.3.9-fpm
+FROM php:7.3.11-fpm
 
 ARG timezone
 ARG xdebug=false
